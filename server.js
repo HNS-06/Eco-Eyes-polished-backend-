@@ -7,34 +7,32 @@ const path = require('path');
 const config = require('./config');
 
 const app = express();
-app.use(cors());
+
+// --------------------
+// CORS - Only allow frontend
+// --------------------
+app.use(cors({
+  origin: "https://eco-eyes-polished-frontend.vercel.app",
+  methods: ["GET", "POST"]
+}));
 app.use(express.json());
 
 // --------------------
-// Backend API Routes
+// Backend API Routes (if any)
 // --------------------
 const api = require('./routes/api');
 app.use('/api', api);
 
 // --------------------
-// Frontend Static Serving (optional, if build exists)
-// --------------------
-const frontendBuildPath = path.join(__dirname, '../frontend/build');
-app.use(express.static(frontendBuildPath));
-
-app.get('*', (req, res) => {
-  if (req.path.startsWith('/api')) return res.status(404).send('API route not found');
-  const indexFile = path.join(frontendBuildPath, 'index.html');
-  res.sendFile(indexFile, (err) => {
-    if (err) res.status(500).send('Error loading frontend');
-  });
-});
-
-// --------------------
 // HTTP + Socket.IO Setup
 // --------------------
 const server = http.createServer(app);
-const io = new Server(server, { cors: { origin: '*' } });
+const io = new Server(server, {
+  cors: {
+    origin: "https://eco-eyes-polished-frontend.vercel.app",
+    methods: ["GET", "POST"]
+  }
+});
 
 // --------------------
 // Data
@@ -54,7 +52,7 @@ const feedsState = feedsList.map(f => ({ id: f.id, lastAnomalyAt: 0 }));
 // --------------------
 // Helper: Create Frame Data URL
 // --------------------
-function makeFrameDataURL(feedId, anomaly=false, extraText='') {
+function makeFrameDataURL(feedId, anomaly = false, extraText = '') {
   const ts = new Date().toLocaleTimeString();
   const color = anomaly ? '#ff0066' : '#33ffcc';
   const glitch = anomaly ? `<rect x="0" y="0" width="100%" height="100%" fill="black" opacity="0.12"></rect>` : '';
@@ -101,7 +99,7 @@ function startEmission() {
         anomaly,
         event: evt,
         meta: {
-          location: feedsList[feed.id-1]?.location || 'Unknown',
+          location: feedsList[feed.id - 1]?.location || 'Unknown',
           note: anomaly ? evt?.desc : 'normal'
         }
       };
@@ -128,10 +126,16 @@ io.on('connection', (socket) => {
 });
 
 // --------------------
+// Health Check
+// --------------------
+app.get("/", (req, res) => {
+  res.send("Echo Eyes backend is running");
+});
+
+// --------------------
 // Start Server
 // --------------------
 const PORT = process.env.PORT || config.PORT || 5000;
-
 server.listen(PORT, () => {
   console.log(`Echo Eyes backend listening on :${PORT} (USE_DB=${config.USE_DB})`);
   startEmission();
