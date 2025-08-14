@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1,
+    "name": "Market Street",
+    "location": "Sector 1 - Block 3"
+  },
+  {
+    "id": 2,
+    "name": "Neon Alley",
+    "location": "Sector 2 - Block 5"
+  },
+  {
+    "id": 3,
+    "name": "Skybridge",
+    "location": "Sector 1 - Block 8"
+  },
+  {
+    "id": 4,
+    "name": "Old Harbor",
+    "location": "Sector 3 - Block 2"
+  },
+  {
+    "id": 5,
+    "name": "Central Plaza",
+    "location": "Sector 2 - Block 1"
+  },
+  {
+    "id": 6,
+    "name": "Undercity",
+    "location": "Sector 3 - Block 6"
+  }
+]

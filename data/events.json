@@ -1,0 +1,27 @@
+[
+  {
+    "type": "loiter",
+    "desc": "Person loitering suspiciously",
+    "severity": "low"
+  },
+  {
+    "type": "package_drop",
+    "desc": "Unknown package dropped by drone",
+    "severity": "high"
+  },
+  {
+    "type": "graffiti",
+    "desc": "Glitched graffiti appears with code",
+    "severity": "medium"
+  },
+  {
+    "type": "exchange",
+    "desc": "Briefcase exchange between two individuals",
+    "severity": "medium"
+  },
+  {
+    "type": "signal_loss",
+    "desc": "Short signal loss, feed corrupted",
+    "severity": "low"
+  }
+]
